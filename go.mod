@@ -3,6 +3,7 @@ module myapp
 go 1.24.1
 
 require (
+	github.com/a-h/templ v0.3.833 // indirect
 	github.com/icza/gox v0.2.0 // indirect
 	github.com/labstack/echo/v4 v4.13.3 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
