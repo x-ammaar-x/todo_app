@@ -6,7 +6,7 @@
     <title>Todo List</title>
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
 </head>
-<body>
+<body hx-boost="true">
     <h1>Task List</h1>
     <br>
     <div>
@@ -27,7 +27,7 @@
             
         </tbody>
     </table>
-    <div hx-get="/fetch-tasks" hx-target="#taskTable" hx-trigger="load" hx-swap="beforeend"></div>
+    <div hx-get="/todo/all" hx-target="#taskTable" hx-trigger="load" hx-swap="beforeend"></div>
 
 </body>
 </html>
