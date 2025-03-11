@@ -1,6 +1,6 @@
 #ignore the tmp directory
 tmp/
 node_modules/
+**/output.css
 # ignore ALL .log files
-output.css
 *.log
