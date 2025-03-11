@@ -1,0 +1,27 @@
+package main
+
+import ( 
+    "strconv"
+)
+
+templ todo(i int, todo Todo){
+     {{ id := strconv.Itoa(i) }}
+     <tr id={"task-"+id} class="bg-gray-100 text-center items-center justify-center">
+            <td class="border-b-2 border-black px-3 py-4">{id}</td>
+            <td class="border-b-2 border-black px-3 py-4">{todo.name}</td>
+            <td class="border-b-2 border-black px-3 py-4">
+                <input type="checkbox" hx-put={"/todo/"+id} hx-trigger="change" hx-target={"#task-"+id} hx-swap="outerHTML" checked?={ todo.status }>
+            </td>
+            <td class="border-b-2 border-black px-3 py-4">
+                <button hx-delete={"/todo/"+id} hx-target={"#task-"+id} hx-swap="outerHTML" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Delete</button>
+            </td>
+    </tr>
+}
+
+templ allTodos(todos [1024]Todo){
+    for i, item := range todos {
+        if len(item.name)>0 {
+            @todo(i, item)
+        }
+    }
+}

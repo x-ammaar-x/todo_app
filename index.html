@@ -5,25 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./output.css" rel="stylesheet">
 </head>
-<body hx-boost="true">
-    <h1>Task List</h1>
+<body hx-boost="true" class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
+    <section class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Task List</h1>
+    </section>
     <br>
-    <div>
-        <input type="text" id="name" name="name" placeholder="Enter task name" />
-        <button hx-post="/todo/" hx-target="#taskTable" hx-swap="beforeend" hx-include="[name='name']">Add Task</button>
+    <div class="mb-6 flex gap-2">
+        <input type="text" id="name" name="name" placeholder="Enter task name" 
+        class="border border-gray-300 rounded-lg px-4 py-2 w-64"/>
+        <button hx-post="/todo/" hx-target="#taskTable" hx-swap="beforeend" hx-include="[name='name']" 
+        class = "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add Task</button>
     </div>
 
-    <table border="1" id="taskTable">
+    <table border="1" id="taskTable" class="w-full max-w-2xl border-collapse border border-gray-300 bg-white shadow-lg rounded-lg">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Task</th>
-                <th>Status</th>
-                <th>Delete</th>
+            <tr class="bg-gray-300 text-gray-700">
+                <th class="border border-gray-300 px-3 py-4">ID</th>
+                <th class="border border-gray-300 px-3 py-4">Task</th>
+                <th class="border border-gray-300 px-3 py-4">Status</th>
+                <th class="border border-gray-300 px-3 py-4">Delete</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
             
         </tbody>
     </table>
