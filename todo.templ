@@ -9,7 +9,7 @@ templ todo(i int, todo Todo){
      <tr id={"task-"+id} class="bg-gray-100 text-center items-center justify-center">
             <td class="border-b-2 border-black px-3 py-4">{id}</td>
             <td class="border-b-2 border-black px-3 py-4">{todo.name}</td>
-            <td class="border-b-2 border-black px-3 py-4">
+            <td class="bg-blue-100 border-b-2 border-black px-3 py-4">
                 <input type="checkbox" hx-put={"/todo/"+id} hx-trigger="change" hx-target={"#task-"+id} hx-swap="outerHTML" checked?={ todo.status }>
             </td>
             <td class="border-b-2 border-black px-3 py-4">
