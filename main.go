@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	. "github.com/icza/gox/gox"
 	"github.com/labstack/echo/v4"
 )
 
@@ -41,7 +42,7 @@ func main() {
 					<td>%s</td>
 					<td><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
 					<td><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML">Delete</button></td>
-				</tr>`, i, i+1, todos[i].name, checked(todos[i].status), i, i, i, i)
+				</tr>`, i, i+1, todos[i].name, If(todos[i].status, "checked", ""), i, i, i, i)
 			}
 		}
 		return c.String(http.StatusOK, result)
@@ -103,24 +104,6 @@ func main() {
 	if err := e.Start(":8080"); err != http.ErrServerClosed {
 		e.Logger.Fatal(err)
 	}
-
-	/*e.GET("/todo/:id", func(c echo.Context) error {
-		id, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			panic(err)
-		}
-		if (id >= counter) || (todos[id].name == "") {
-			return c.String(http.StatusBadRequest, "Does not exist")
-		}
-		result := fmt.Sprintf(`
-		<tr id="task-%d">
-			<td>%d</td>
-			<td>%s</td>
-			<td><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
-			<td><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML">Delete</button></td>
-		</tr>`, counter, (counter + 1), todos[counter].name, checked(todos[counter].status), counter, counter, counter, counter)
-		return c.String(http.StatusOK, result)
-	})*/
 }
 
 func checked(status bool) string {
