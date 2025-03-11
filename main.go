@@ -62,14 +62,14 @@ func main() {
 		}
 		todos[counter] = item{name, false}
 		result := fmt.Sprintf(`
-			<tr id="task-%d">
-				<td>%d</td>
-				<td>%s</td>
-				<td><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
-				<td><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML">Delete</button></td>
+			<tr id="task-%d" class="bg-gray-100 text-center items-center justify-center">
+				<td class="border-b-2 border-black px-3 py-4">%d</td>
+				<td class="border-b-2 border-black px-3 py-4">%s</td>
+				<td class="border-b-2 border-black px-3 py-4"><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
+				<td class="border-b-2 border-black px-3 py-4"><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML"
+				class = "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Delete</button></td>
 			</tr>`, counter, (counter + 1), todos[counter].name, If(todos[counter].status, "checked", ""), counter, counter, counter, counter)
 		counter++
-
 		return c.String(http.StatusOK, result)
 	})
 
