@@ -6,18 +6,17 @@ import (
 	"strconv"
 	"strings"
 
-	. "github.com/icza/gox/gox"
 	"github.com/labstack/echo/v4"
 )
 
-type item struct {
+type Todo struct {
 	name   string
 	status bool
 }
 
 func main() {
 
-	var todos [1024]item
+	var todos [1024]Todo
 	counter := 0
 
 	e := echo.New()
@@ -36,22 +35,10 @@ func main() {
 		if counter == 0 {
 			return c.String(http.StatusOK, "")
 		}
-
-		var result string
-		for i := 0; i < counter; i++ {
-			if todos[i].name == "" {
-				result += ""
-			} else {
-				result += fmt.Sprintf(`
-				<tr id="task-%d">
-					<td>%d</td>
-					<td>%s</td>
-					<td><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
-					<td><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML">Delete</button></td>
-				</tr>`, i, i+1, todos[i].name, If(todos[i].status, "checked", ""), i, i, i, i)
-			}
-		}
-		return c.String(http.StatusOK, result)
+		fmt.Println("Counter: %d", counter);
+		
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+		return allTodos(todos).Render(c.Request().Context(), c.Response().Writer)
 	})
 
 	e.POST("/todo/", func(c echo.Context) error {
@@ -60,17 +47,11 @@ func main() {
 		if strings.Trim(name, " ") == "" {
 			return c.String(http.StatusOK, "")
 		}
-		todos[counter] = item{name, false}
-		result := fmt.Sprintf(`
-			<tr id="task-%d" class="bg-gray-100 text-center items-center justify-center">
-				<td class="border-b-2 border-black px-3 py-4">%d</td>
-				<td class="border-b-2 border-black px-3 py-4">%s</td>
-				<td class="border-b-2 border-black px-3 py-4"><input type="checkbox" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
-				<td class="border-b-2 border-black px-3 py-4"><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML"
-				class = "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Delete</button></td>
-			</tr>`, counter, (counter + 1), todos[counter].name, If(todos[counter].status, "checked", ""), counter, counter, counter, counter)
+		todos[counter] = Todo{name, false}
+		todoComp := todo(counter, todos[counter])
 		counter++
-		return c.String(http.StatusOK, result)
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+		return todoComp.Render(c.Request().Context(), c.Response().Writer)
 	})
 
 	e.PUT("/todo/:id", func(c echo.Context) error {
@@ -84,16 +65,10 @@ func main() {
 		}
 
 		todos[id].status = !todos[id].status
+		todoComp := todo(id, todos[id])
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+		return todoComp.Render(c.Request().Context(), c.Response().Writer)
 
-		result := fmt.Sprintf(`
-			<tr id="task-%d">
-				<td>%d</td>
-				<td>%s</td>
-				<td><input type="checkbox" id="status-%d" %s hx-put="/todo/%d" hx-trigger="change" hx-target="#task-%d" hx-swap="outerHTML"></td>
-				<td><button hx-delete="/todo/%d" hx-target="#task-%d" hx-swap="outerHTML">Delete</button></td>
-			</tr>`, id, (id + 1), todos[id].name, id, If(todos[id].status, "checked", ""), id, id, id, id)
-
-		return c.String(http.StatusOK, result)
 	})
 
 	e.DELETE("/todo/:id", func(c echo.Context) error {
